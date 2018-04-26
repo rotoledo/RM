@@ -10,10 +10,15 @@ namespace RM.Services.RM_Paciente
 {
 	public class PacienteScenarios : PacienteScenarioBase
 	{
-
-		HttpClient httpClient = new HttpClient();
-		XmlDocument xmlDocument = new XmlDocument();
+		HttpClient httpClient;
+		XmlDocument xmlDocument;
 		HttpRequestMessage httpRequestMessage;
+
+		public PacienteScenarios()
+		{
+			httpClient = new HttpClient();
+			xmlDocument = new XmlDocument();
+		}
 
 		[Fact]
 		public async Task Get_Paciente()
