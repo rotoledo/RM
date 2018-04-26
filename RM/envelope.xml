@@ -1,0 +1,12 @@
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:br="http://www.totvs.com.br/br/">
+   <soap:Header/>
+   <soap:Body>
+      <br:ReadRecordAuth>
+         <br:DataServerName>SauPacienteData</br:DataServerName>
+         <br:PrimaryKey>2;997852</br:PrimaryKey>
+         <br:Contexto>CODCOLIGADA=2;CODSISTEMA=O;CODUSUARIO=mestre</br:Contexto>
+         <br:Usuario>mestre</br:Usuario>
+         <br:Senha>totvs</br:Senha>
+      </br:ReadRecordAuth>
+   </soap:Body>
+</soap:Envelope>
