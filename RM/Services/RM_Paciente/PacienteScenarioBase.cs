@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace RM.Services.RM_Paciente
 {
@@ -13,7 +12,7 @@ namespace RM.Services.RM_Paciente
 		public static string contexto = "CODCOLIGADA=2;CODSISTEMA=O;CODUSUARIO=mestre";
 		public static string usuario = "mestre";
 		public static string senha = "totvs";
-		
+
 		public static string EnvelopeBuilder(ReadRecordEnvelopeBody readRecordEnvelopeBody)
 		{
 			return $@"<soap:Envelope xmlns:soap=""http://www.w3.org/2003/05/soap-envelope"" xmlns:br=""http://www.totvs.com.br/br/"">
@@ -47,7 +46,8 @@ namespace RM.Services.RM_Paciente
 				Senha = senha;
 			}
 
-			
+
 		}
 	}
+
 }

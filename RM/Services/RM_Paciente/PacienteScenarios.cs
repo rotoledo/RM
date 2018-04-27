@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Net;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace RM.Services.RM_Paciente
 {
@@ -13,17 +15,19 @@ namespace RM.Services.RM_Paciente
 		HttpClient httpClient;
 		XmlDocument xmlDocument;
 		HttpRequestMessage httpRequestMessage;
+		Methods methods;
 
 		public PacienteScenarios()
 		{
 			httpClient = new HttpClient();
 			xmlDocument = new XmlDocument();
+			methods = new Methods();
 		}
 
 		[Fact]
 		public async Task Get_Paciente()
 		{
-			// When
+			// Given
 			ReadRecordEnvelopeBody readRecordEnvelopeBody = new ReadRecordEnvelopeBody("SauPacienteData", "2;997852");
 			string envelope = EnvelopeBuilder(readRecordEnvelopeBody);
 			var content = new StringContent(envelope, Encoding.UTF8, "text/xml");
@@ -33,18 +37,18 @@ namespace RM.Services.RM_Paciente
 
 			// When
 			var response = await httpClient.SendAsync(httpRequestMessage);
+
+			// Handle Response Content Data  (?)
 			var response_content = response.Content.ReadAsStringAsync().Result;
+			string xmlContent = methods.GetTextbySOAPActionAndTagName(response_content, "ReadRecordAuth", "SZPACIENTE");
+			var rmObject = (SZPACIENTE)methods.DeserializeXMLByType<SZPACIENTE>(xmlContent);
 
 			// Then
 			response.EnsureSuccessStatusCode();
 			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-
-			xmlDocument.LoadXml(response_content);
-			var content02 = xmlDocument.GetElementsByTagName("ReadRecordAuthResult");
-			var innerText = content02.Item(0).InnerText;
-			xmlDocument.LoadXml(innerText);
-
+			Assert.Equal(readRecordEnvelopeBody.PrimaryKey.Split(';')[0], rmObject.CODCOLIGADA);
+			Assert.Equal(readRecordEnvelopeBody.PrimaryKey.Split(';')[1], rmObject.CODPACIENTE);
 		}
+
 	}
 }
