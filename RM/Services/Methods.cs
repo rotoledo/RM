@@ -28,5 +28,12 @@ namespace RM.Services
 			var _string = xmlDocument.GetElementsByTagName(tagName).Item(0).OuterXml;
 			return _string;
 		}
+
+		public string GetTextbySaveRecordAndTagName(string response_content, string soapAction, string tagName)
+		{
+			xmlDocument.LoadXml(response_content);
+			var innerText = xmlDocument.GetElementsByTagName(soapAction).Item(0).InnerText;
+			return innerText;
+		}
 	}
 }
