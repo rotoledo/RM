@@ -5,12 +5,19 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 
-namespace RM.Services.RM_Paciente
+namespace RM.Services.Paciente
 {
 
 	[XmlRoot("SZPACIENTE")]
 	public class SZPACIENTE : RMEntity
 	{
+		public SZPACIENTE()
+		{
+			this.NOMEPACIENTE = "Nome do Paciente " + DateTime.Now.ToString().Replace(":", " ").Replace(".", " ");
+			this.CPF = PacienteScenarioBase.GenerateCPF();
+		}
+
+
 		[XmlElement("CODCOLIGADA")]
 		public string CODCOLIGADA { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -35,5 +36,9 @@ namespace RM.Services
 			var innerText = xmlDocument.GetElementsByTagName(soapAction).Item(0).InnerText;
 			return innerText;
 		}
+
+		
+
+
 	}
 }

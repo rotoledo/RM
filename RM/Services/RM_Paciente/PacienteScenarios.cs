@@ -8,7 +8,7 @@ using System.Net;
 using System.Xml.Serialization;
 using System.IO;
 
-namespace RM.Services.RM_Paciente
+namespace RM.Services.Paciente
 {
 	public class PacienteScenarios : PacienteScenarioBase
 	{
@@ -25,7 +25,7 @@ namespace RM.Services.RM_Paciente
 		}
 
 		[Fact]
-		public async Task Get_Paciente()
+		public async Task Can_Get_Paciente()
 		{
 			// Given
 			ReadRecordEnvelopeBody readRecordEnvelopeBody = new ReadRecordEnvelopeBody("SauPacienteData", "2;997852");
@@ -51,10 +51,10 @@ namespace RM.Services.RM_Paciente
 		}
 
 		[Fact]
-		public async Task Create_Paciente()
+		public async Task Can_Create_Paciente()
 		{
 			// Given
-			var szPacienteXml = SZPacienteBuilder();
+			var szPacienteXml = SZPacienteBuilder(new SZPACIENTE());
 			string envelope = SaveRecordEnvelopeBuilder(szPacienteXml);
 			var content = new StringContent(envelope, Encoding.UTF8, "text/xml" );
 			httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
@@ -73,6 +73,20 @@ namespace RM.Services.RM_Paciente
 			Assert.NotEmpty(xmlContent.Split(';')[0]);
 			Assert.NotEmpty(xmlContent.Split(';')[1]);
 		}
+		[Fact]
+		public async Task Can_Update_Paciente()
+		{
+			// Given
+
+			// WHen
+
+			// Handle Response Content Data  (?)
+
+			// Then
+
+		}
+
+
 
 	}
 }

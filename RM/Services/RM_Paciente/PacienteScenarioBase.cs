@@ -3,7 +3,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace RM.Services.RM_Paciente
+namespace RM.Services.Paciente
 {
 	public class PacienteScenarioBase
 	{
@@ -44,14 +44,14 @@ namespace RM.Services.RM_Paciente
 					</soap:Envelope>";
 		}
 
-		public string SZPacienteBuilder()
+		public string SZPacienteBuilder(SZPACIENTE sZPACIENTE)
 		{
-			return @"<![CDATA[<?xml version=""1.0"" encoding=""UTF-8""?>
+			return $@"<![CDATA[<?xml version=""1.0"" encoding=""UTF-8""?>
 <SauPaciente>
    <SZPACIENTE>
       <CODCOLIGADA>2</CODCOLIGADA>
       <CODPACIENTE>0</CODPACIENTE>
-      <NOMEPACIENTE>NOVO PACIENTE SOAP 6440</NOMEPACIENTE>
+      <NOMEPACIENTE>{sZPACIENTE.NOMEPACIENTE}</NOMEPACIENTE>
       <SEXO>M</SEXO>
       <DATANASC>1998-01-01T00:00:00</DATANASC>
       <NOMEPAI>PAI TESTE 3</NOMEPAI>
@@ -64,7 +64,7 @@ namespace RM.Services.RM_Paciente
       <IDENTIDADE>987654312</IDENTIDADE>
       <ORGAOEMISSOR>SSP</ORGAOEMISSOR>
       <UFIDENTIDADE>RS</UFIDENTIDADE>
-      <CPF>47719575253</CPF>
+      <CPF>{sZPACIENTE.CPF}</CPF>
       <CODESTADOCIVIL>1</CODESTADOCIVIL>
       <CEP>90000000</CEP>
       <ENDERECO>TESTEAUTO</ENDERECO>
@@ -115,6 +115,40 @@ namespace RM.Services.RM_Paciente
 			}
 
 
+		}
+		public static string GenerateCPF()
+		{
+			int soma = 0, resto = 0;
+			int[] multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+			int[] multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+
+			Random rnd = new Random();
+			string semente = rnd.Next(100000000, 999999999).ToString();
+
+			for (int i = 0; i < 9; i++)
+				soma += int.Parse(semente[i].ToString()) * multiplicador1[i];
+
+			resto = soma % 11;
+			if (resto < 2)
+				resto = 0;
+			else
+				resto = 11 - resto;
+
+			semente = semente + resto;
+			soma = 0;
+
+			for (int i = 0; i < 10; i++)
+				soma += int.Parse(semente[i].ToString()) * multiplicador2[i];
+
+			resto = soma % 11;
+
+			if (resto < 2)
+				resto = 0;
+			else
+				resto = 11 - resto;
+
+			semente = semente + resto;
+			return semente;
 		}
 	}
 
