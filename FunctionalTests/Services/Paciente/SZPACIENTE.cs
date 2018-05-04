@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Xml.Serialization;
+using DataServer.FunctionalTests.Services;
 
-namespace DataServer.Services.Paciente
+namespace DataServer.FunctionalTests.Services.Paciente
 {
 
 	[XmlRoot("SZPACIENTE")]

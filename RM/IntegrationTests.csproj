@@ -81,15 +81,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Services\Methods.cs" />
-    <Compile Include="Services\RM_Paciente\PacienteScenarioBase.cs" />
-    <Compile Include="Services\RM_Paciente\PacienteScenarios.cs" />
+    <Compile Include="Services\Paciente\PacienteScenarioBase.cs" />
+    <Compile Include="Services\Paciente\PacienteScenarios.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\RM_Paciente\SZPACIENTE.cs" />
+    <Compile Include="Services\Paciente\SZPACIENTE.cs" />
     <Compile Include="Services\ScenarioBase.cs" />
     <Compile Include="Services\SOAPAction.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\xunit.analyzers.0.7.0\analyzers\dotnet\cs\xunit.analyzers.dll" />

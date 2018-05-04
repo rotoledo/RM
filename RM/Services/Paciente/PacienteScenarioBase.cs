@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
+using DataServer.Services;
 
-namespace DataServer.Services.Paciente
+namespace DataServer.IntegrationTests.Services.Paciente
 {
 	public class PacienteScenarioBase : ScenarioBase
 	{

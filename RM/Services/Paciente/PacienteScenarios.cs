@@ -1,9 +1,10 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using DataServer.Services;
 using Xunit;
 
-namespace DataServer.Services.Paciente
+namespace DataServer.IntegrationTests.Services.Paciente
 {
 	public class PacienteScenarios : PacienteScenarioBase
 	{
@@ -12,7 +13,7 @@ namespace DataServer.Services.Paciente
 		public async Task Can_Read_Paciente()
 		{
 			// GIVEN
-			var readRecordEnvelopeBody = ReadRecordSZPacienteEnvelopeBody("2", "997852");
+			var readRecordEnvelopeBody = ReadRecordSZPacienteEnvelopeBody(ScenarioBase.Coligada, "997852");
 			var httpRequestMessage = SZPacienteBuilder(readRecordEnvelopeBody, SOAPAction.ReadRecordAuth);
 
 			// WHEN
@@ -75,7 +76,7 @@ namespace DataServer.Services.Paciente
 			var responseUpdate = await new HttpClient().SendAsync(httpRequestMessage_SaveRecord);
 
 			// AND
-			var readRecordEnvelopeBody = ReadRecordSZPacienteEnvelopeBody("2", "997852");
+			var readRecordEnvelopeBody = ReadRecordSZPacienteEnvelopeBody(ScenarioBase.Coligada, "997852");
 			var httpRequestMessage_ReadRecord = SZPacienteBuilder(readRecordEnvelopeBody, SOAPAction.ReadRecordAuth);
 
 			// WHEN

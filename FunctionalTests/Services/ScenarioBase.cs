@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Text;
 
-namespace DataServer.Services
+namespace DataServer.FunctionalTests.Services
 {
 	public class ScenarioBase
 	{
