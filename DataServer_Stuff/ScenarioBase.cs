@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Text;
 
-namespace DataServer.Services
+namespace DataServer_Stuff
 {
 	public class ScenarioBase
 	{

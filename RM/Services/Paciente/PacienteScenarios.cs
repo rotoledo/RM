@@ -1,8 +1,9 @@
-﻿using System.Net;
+﻿using Xunit;
+using RM_Stuff;
+using System.Net;
 using System.Net.Http;
+using DataServer_Stuff;
 using System.Threading.Tasks;
-using DataServer.Services;
-using Xunit;
 
 namespace DataServer.IntegrationTests.Services.Paciente
 {
@@ -10,7 +11,7 @@ namespace DataServer.IntegrationTests.Services.Paciente
 	{
 
 		[Fact]
-		public async Task Can_Read_Paciente()
+		public async Task Read_Paciente_returns_OK_Status_code()
 		{
 			// GIVEN
 			var readRecordEnvelopeBody = ReadRecordSZPacienteEnvelopeBody(ScenarioBase.Coligada, "997852");
@@ -18,17 +19,13 @@ namespace DataServer.IntegrationTests.Services.Paciente
 
 			// WHEN
 			var response = await new HttpClient().SendAsync(httpRequestMessage);
-			var dbPaciente = ExtractPacienteFromReadRecordResponse(response);
 
 			// THEN
 			response.EnsureSuccessStatusCode();
-			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-			Assert.Equal(readRecordEnvelopeBody.Content.Split(';')[0], dbPaciente.CODCOLIGADA);
-			Assert.Equal(readRecordEnvelopeBody.Content.Split(';')[1], dbPaciente.CODPACIENTE);
 		}
 
 		[Fact]
-		public async Task Can_Create_Paciente()
+		public async Task Create_Paciente_returns_OK_Status_code()
 		{
 			// GIVEN
 			var szPacienteXml = SZPacienteXmlBuilder(new SZPACIENTE());
@@ -37,56 +34,68 @@ namespace DataServer.IntegrationTests.Services.Paciente
 
 			// WHEN
 			var response = await new HttpClient().SendAsync(httpRequestMessage);
-			string xmlContent = Methods.GetInnerTextFromSaveRecordResponse(response);
 
 			// THEN
 			response.EnsureSuccessStatusCode();
-			Assert.NotEmpty(xmlContent.Split(';')[0]);
-			Assert.NotEmpty(xmlContent.Split(';')[1]);
 		}
 
 		[Fact]
-		public async Task Can_Update_Paciente()
+		public async Task Update_Paciente_returns_OK_Status_code()
 		{
 			// GIVEN
-			var paciente = new SZPACIENTE() { CODPACIENTE = "997852" };
-			var szPacienteXml = SZPacienteXmlBuilder(paciente);
+			var szPacienteXml = SZPacienteXmlBuilder(new SZPACIENTE() { CODPACIENTE = "997852" });
 			var saveRecordEnvelopeBody = SaveRecordSZPacienteEnvelopeBody(szPacienteXml);
 			var httpRequestMessage = SZPacienteBuilder(saveRecordEnvelopeBody, SOAPAction.SaveRecordAuth);
 
 			// WHEN
 			var response = await new HttpClient().SendAsync(httpRequestMessage);
-			string xmlContent = Methods.GetInnerTextFromSaveRecordResponse(response);
 
 			// THEN
-			Assert.True(response.IsSuccessStatusCode, response.StatusCode + xmlContent);
+			response.EnsureSuccessStatusCode();
 		}
-
 
 		[Fact]
-		public async Task Can_Update_And_Read_Paciente()
+		public async Task Delete_Paciente_returns_400_Status_code()
 		{
 			// GIVEN
-			var paciente = new SZPACIENTE() { CODPACIENTE = "997852" };
-			var szPacienteXml = SZPacienteXmlBuilder(paciente);
+			var szPacienteXml = SZPacienteXmlBuilder(new SZPACIENTE() { CODPACIENTE = "997852" });
 			var saveRecordEnvelopeBody = SaveRecordSZPacienteEnvelopeBody(szPacienteXml);
-			var httpRequestMessage_SaveRecord = SZPacienteBuilder(saveRecordEnvelopeBody, SOAPAction.SaveRecordAuth);
-
-			// AND
-			var responseUpdate = await new HttpClient().SendAsync(httpRequestMessage_SaveRecord);
-
-			// AND
-			var readRecordEnvelopeBody = ReadRecordSZPacienteEnvelopeBody(ScenarioBase.Coligada, "997852");
-			var httpRequestMessage_ReadRecord = SZPacienteBuilder(readRecordEnvelopeBody, SOAPAction.ReadRecordAuth);
+			var httpRequestMessage = SZPacienteBuilder(saveRecordEnvelopeBody, SOAPAction.DeleteRecordAuth);
 
 			// WHEN
-			var responseReadRecord = await new HttpClient().SendAsync(httpRequestMessage_ReadRecord);
-			var dbPaciente = ExtractPacienteFromReadRecordResponse(responseReadRecord);
+			var response = await new HttpClient().SendAsync(httpRequestMessage);
 
 			// THEN
-			Assert.Equal(paciente.NOMEPACIENTE, dbPaciente.NOMEPACIENTE);
+			Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 		}
 
+		[Fact]
+		public async Task Update_Non_Existent_Paciente_returns_400_Status_code()
+		{
+			// GIVEN
+			var szPacienteXml = SZPacienteXmlBuilder(new SZPACIENTE() { CODPACIENTE = "kijvbraewivbriewbvn548578934758947t9jorngl" });
+			var saveRecordEnvelopeBody = SaveRecordSZPacienteEnvelopeBody(szPacienteXml);
+			var httpRequestMessage = SZPacienteBuilder(saveRecordEnvelopeBody, SOAPAction.SaveRecordAuth);
 
+			// WHEN
+			var response = await new HttpClient().SendAsync(httpRequestMessage);
+
+			// THEN
+			Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+		}
+
+		[Fact]
+		public async Task Read_Non_Existent_Paciente_returns_400_Status_code()
+		{
+			// GIVEN
+			var readRecordEnvelopeBody = ReadRecordSZPacienteEnvelopeBody("xxx123456xxx", "xxx123456xxx");
+			var httpRequestMessage = SZPacienteBuilder(readRecordEnvelopeBody, SOAPAction.ReadRecordAuth);
+
+			// WHEN
+			var response = await new HttpClient().SendAsync(httpRequestMessage);
+
+			// THEN
+			Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+		}
 	}
 }

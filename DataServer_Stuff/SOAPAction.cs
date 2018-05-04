@@ -1,4 +1,4 @@
-﻿namespace DataServer.FunctionalTests.Services
+﻿namespace DataServer_Stuff
 {
 	public abstract class SOAPAction
 	{
@@ -38,5 +38,4 @@
 		// Insere um registro no Datataserver (regra de negócio RM). Este método somente irá incluir o registro se este for válido de acordo com as regras de negócio definidas pelo DataServer.
 		public static string SaveRecordAuth = "SaveRecordAuth";
 	}
-
 }

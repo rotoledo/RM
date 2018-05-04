@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Xml.Serialization;
-using DataServer.FunctionalTests.Services;
 
-namespace DataServer.FunctionalTests.Services.Paciente
+namespace RM_Stuff
 {
-
 	[XmlRoot("SZPACIENTE")]
 	public class SZPACIENTE : RMEntity
 	{
 		public SZPACIENTE()
 		{
 			this.NOMEPACIENTE = "Nome do Paciente " + DateTime.Now.ToString().Replace(":", " ").Replace(".", " ");
-			this.CPF = Methods.GenerateCPF();
+			this.CPF = GenerateCPF();
 			this.CODPACIENTE = "0";
 		}
 
@@ -45,6 +43,42 @@ namespace DataServer.FunctionalTests.Services.Paciente
 		[XmlElement("OBSERVACAO")]
 		public string OBSERVACAO { get; set; }
 
+
+		// TODO: Mover método para outro lugar
+		public static string GenerateCPF()
+		{
+			int soma = 0, resto = 0;
+			int[] multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+			int[] multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+
+			Random rnd = new Random();
+			string semente = rnd.Next(100000000, 999999999).ToString();
+
+			for (int i = 0; i < 9; i++)
+				soma += int.Parse(semente[i].ToString()) * multiplicador1[i];
+
+			resto = soma % 11;
+			if (resto < 2)
+				resto = 0;
+			else
+				resto = 11 - resto;
+
+			semente = semente + resto;
+			soma = 0;
+
+			for (int i = 0; i < 10; i++)
+				soma += int.Parse(semente[i].ToString()) * multiplicador2[i];
+
+			resto = soma % 11;
+
+			if (resto < 2)
+				resto = 0;
+			else
+				resto = 11 - resto;
+
+			semente = semente + resto;
+			return semente;
+		}
 	}
 
 	public class RMEntity

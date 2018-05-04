@@ -84,15 +84,22 @@
     <Compile Include="Services\Methods.cs" />
     <Compile Include="Services\Paciente\PacienteScenarioBase.cs" />
     <Compile Include="Services\Paciente\PacienteScenarios.cs" />
-    <Compile Include="Services\Paciente\SZPACIENTE.cs" />
-    <Compile Include="Services\ScenarioBase.cs" />
-    <Compile Include="Services\SOAPAction.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\xunit.analyzers.0.7.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataServer_Stuff\DataServer_Stuff.csproj">
+      <Project>{e9d72b9f-54a8-4a37-a739-3cacbc22b931}</Project>
+      <Name>DataServer_Stuff</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RMStuff\RM_Stuff.csproj">
+      <Project>{5f3da0a7-8347-41bc-8d9f-8eaa5b95f85e}</Project>
+      <Name>RM_Stuff</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

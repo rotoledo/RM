@@ -1,5 +1,6 @@
-﻿using System.Net.Http;
-using DataServer.FunctionalTests.Services;
+﻿using RM_Stuff;
+using System.Net.Http;
+using DataServer_Stuff;
 
 namespace DataServer.FunctionalTests.Services.Paciente
 {
