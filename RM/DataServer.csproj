@@ -85,6 +85,8 @@
     <Compile Include="Services\RM_Paciente\PacienteScenarios.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\RM_Paciente\SZPACIENTE.cs" />
+    <Compile Include="Services\ScenarioBase.cs" />
+    <Compile Include="Services\SOAPAction.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

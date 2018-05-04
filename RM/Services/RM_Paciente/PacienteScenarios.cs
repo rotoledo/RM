@@ -1,91 +1,90 @@
-﻿using Xunit;
-using System;
-using System.Text;
+﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Xml;
-using System.Net;
-using System.Xml.Serialization;
-using System.IO;
+using Xunit;
 
-namespace RM.Services.Paciente
+namespace DataServer.Services.Paciente
 {
 	public class PacienteScenarios : PacienteScenarioBase
 	{
-		HttpClient httpClient;
-		XmlDocument xmlDocument;
-		HttpRequestMessage httpRequestMessage;
-		Methods methods;
-
-		public PacienteScenarios()
-		{
-			httpClient = new HttpClient();
-			xmlDocument = new XmlDocument();
-			methods = new Methods();
-		}
 
 		[Fact]
-		public async Task Can_Get_Paciente()
+		public async Task Can_Read_Paciente()
 		{
-			// Given
-			ReadRecordEnvelopeBody readRecordEnvelopeBody = new ReadRecordEnvelopeBody("SauPacienteData", "2;997852");
-			string envelope = ReadRecordEnvelopeBuilder(readRecordEnvelopeBody);
-			var content = new StringContent(envelope, Encoding.UTF8, "text/xml");
-			httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
-			httpRequestMessage.Headers.Add("SOAPAction", "http://www.totvs.com.br/br/ReadRecordAuth");
-			httpRequestMessage.Content = content;
+			// GIVEN
+			var readRecordEnvelopeBody = ReadRecordSZPacienteEnvelopeBody("2", "997852");
+			var httpRequestMessage = SZPacienteBuilder(readRecordEnvelopeBody, SOAPAction.ReadRecordAuth);
 
-			// When
-			var response = await httpClient.SendAsync(httpRequestMessage);
+			// WHEN
+			var response = await new HttpClient().SendAsync(httpRequestMessage);
+			var dbPaciente = ExtractPacienteFromReadRecordResponse(response);
 
-			// Handle Response Content Data  (?)
-			var response_content = response.Content.ReadAsStringAsync().Result;
-			string xmlContent = methods.GetTextbySOAPActionAndTagName(response_content, "ReadRecordAuth", "SZPACIENTE");
-			var rmObject = (SZPACIENTE)methods.DeserializeXMLByType<SZPACIENTE>(xmlContent);
-
-			// Then
+			// THEN
 			response.EnsureSuccessStatusCode();
 			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-			Assert.Equal(readRecordEnvelopeBody.PrimaryKey.Split(';')[0], rmObject.CODCOLIGADA);
-			Assert.Equal(readRecordEnvelopeBody.PrimaryKey.Split(';')[1], rmObject.CODPACIENTE);
+			Assert.Equal(readRecordEnvelopeBody.Content.Split(';')[0], dbPaciente.CODCOLIGADA);
+			Assert.Equal(readRecordEnvelopeBody.Content.Split(';')[1], dbPaciente.CODPACIENTE);
 		}
 
 		[Fact]
 		public async Task Can_Create_Paciente()
 		{
-			// Given
-			var szPacienteXml = SZPacienteBuilder(new SZPACIENTE());
-			string envelope = SaveRecordEnvelopeBuilder(szPacienteXml);
-			var content = new StringContent(envelope, Encoding.UTF8, "text/xml" );
-			httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
-			httpRequestMessage.Headers.Add("SOAPAction", "http://www.totvs.com.br/br/SaveRecordAuth");
-			httpRequestMessage.Content = content;
+			// GIVEN
+			var szPacienteXml = SZPacienteXmlBuilder(new SZPACIENTE());
+			var saveRecordEnvelopeBody = SaveRecordSZPacienteEnvelopeBody(szPacienteXml);
+			var httpRequestMessage = SZPacienteBuilder(saveRecordEnvelopeBody, SOAPAction.SaveRecordAuth);
 
-			// When
-			var response = await httpClient.SendAsync(httpRequestMessage);
+			// WHEN
+			var response = await new HttpClient().SendAsync(httpRequestMessage);
+			string xmlContent = Methods.GetInnerTextFromSaveRecordResponse(response);
 
-			// Handle Response Content Data  (?)
-			var response_content = response.Content.ReadAsStringAsync().Result;
-			string xmlContent = methods.GetTextbySaveRecordAndTagName(response_content, "SaveRecordAuthResponse", "SaveRecordAuthResult");
-			
-			// Then
+			// THEN
 			response.EnsureSuccessStatusCode();
 			Assert.NotEmpty(xmlContent.Split(';')[0]);
 			Assert.NotEmpty(xmlContent.Split(';')[1]);
 		}
+
 		[Fact]
 		public async Task Can_Update_Paciente()
 		{
-			// Given
+			// GIVEN
+			var paciente = new SZPACIENTE() { CODPACIENTE = "997852" };
+			var szPacienteXml = SZPacienteXmlBuilder(paciente);
+			var saveRecordEnvelopeBody = SaveRecordSZPacienteEnvelopeBody(szPacienteXml);
+			var httpRequestMessage = SZPacienteBuilder(saveRecordEnvelopeBody, SOAPAction.SaveRecordAuth);
 
-			// WHen
+			// WHEN
+			var response = await new HttpClient().SendAsync(httpRequestMessage);
+			string xmlContent = Methods.GetInnerTextFromSaveRecordResponse(response);
 
-			// Handle Response Content Data  (?)
-
-			// Then
-
+			// THEN
+			Assert.True(response.IsSuccessStatusCode, response.StatusCode + xmlContent);
 		}
 
+
+		[Fact]
+		public async Task Can_Update_And_Read_Paciente()
+		{
+			// GIVEN
+			var paciente = new SZPACIENTE() { CODPACIENTE = "997852" };
+			var szPacienteXml = SZPacienteXmlBuilder(paciente);
+			var saveRecordEnvelopeBody = SaveRecordSZPacienteEnvelopeBody(szPacienteXml);
+			var httpRequestMessage_SaveRecord = SZPacienteBuilder(saveRecordEnvelopeBody, SOAPAction.SaveRecordAuth);
+
+			// AND
+			var responseUpdate = await new HttpClient().SendAsync(httpRequestMessage_SaveRecord);
+
+			// AND
+			var readRecordEnvelopeBody = ReadRecordSZPacienteEnvelopeBody("2", "997852");
+			var httpRequestMessage_ReadRecord = SZPacienteBuilder(readRecordEnvelopeBody, SOAPAction.ReadRecordAuth);
+
+			// WHEN
+			var responseReadRecord = await new HttpClient().SendAsync(httpRequestMessage_ReadRecord);
+			var dbPaciente = ExtractPacienteFromReadRecordResponse(responseReadRecord);
+
+			// THEN
+			Assert.Equal(paciente.NOMEPACIENTE, dbPaciente.NOMEPACIENTE);
+		}
 
 
 	}

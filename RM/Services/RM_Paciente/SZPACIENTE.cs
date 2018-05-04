@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
-using System.Collections.Generic;
 
-namespace RM.Services.Paciente
+namespace DataServer.Services.Paciente
 {
 
 	[XmlRoot("SZPACIENTE")]
@@ -14,9 +10,9 @@ namespace RM.Services.Paciente
 		public SZPACIENTE()
 		{
 			this.NOMEPACIENTE = "Nome do Paciente " + DateTime.Now.ToString().Replace(":", " ").Replace(".", " ");
-			this.CPF = PacienteScenarioBase.GenerateCPF();
+			this.CPF = Methods.GenerateCPF();
+			this.CODPACIENTE = "0";
 		}
-
 
 		[XmlElement("CODCOLIGADA")]
 		public string CODCOLIGADA { get; set; }
@@ -47,6 +43,7 @@ namespace RM.Services.Paciente
 
 		[XmlElement("OBSERVACAO")]
 		public string OBSERVACAO { get; set; }
+
 	}
 
 	public class RMEntity
