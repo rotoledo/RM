@@ -21,9 +21,8 @@ namespace DataServer.FunctionalTests.Services.Paciente
 			var response = await new HttpClient().SendAsync(httpRequestMessage);
 
 			// THEN
-			response.EnsureSuccessStatusCode();
 			string xmlContent = Methods.GetInnerTextFromSaveRecordResponse(response);
-			Assert.NotEmpty(xmlContent.Split(';')[0]);
+			Assert.Equal(Coligada, xmlContent.Split(';')[0]);
 			Assert.NotEmpty(xmlContent.Split(';')[1]);
 		}
 
@@ -46,9 +45,9 @@ namespace DataServer.FunctionalTests.Services.Paciente
 
 			// WHEN
 			var responseReadRecord = await new HttpClient().SendAsync(httpRequestMessage_ReadRecord);
-			var dbPaciente = ExtractPacienteFromReadRecordResponse(responseReadRecord);
 
 			// THEN
+			var dbPaciente = ExtractPacienteFromReadRecordResponse(responseReadRecord);
 			Assert.Equal(paciente.NOMEPACIENTE, dbPaciente.NOMEPACIENTE);
 			Assert.Equal(paciente.CPF, dbPaciente.CPF);
 			Assert.Equal(paciente.CODPACIENTE, dbPaciente.CODPACIENTE);

@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Xml;
 using System.Xml.Serialization;
+using DataServer_Stuff;
 
 namespace DataServer.Services
 {
@@ -26,7 +27,7 @@ namespace DataServer.Services
 			return _string;
 		}
 
-		public static string GetInnerTextFromSaveRecordResponse(HttpResponseMessage response)
+		public static string GetInnerTextFromResponseBySoapAction(HttpResponseMessage response, string soapAction)
 		{
 			var response_content = response.Content.ReadAsStringAsync().Result;
 			string innerText;
@@ -34,7 +35,7 @@ namespace DataServer.Services
 			xmlDocument.LoadXml(response_content);
 			try
 			{
-				innerText = xmlDocument.GetElementsByTagName("SaveRecordAuthResponse").Item(0).InnerText;
+				innerText = xmlDocument.GetElementsByTagName($"{soapAction}Response").Item(0).InnerText;
 
 			}
 			catch

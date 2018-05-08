@@ -4,6 +4,11 @@ using System.Net;
 using System.Net.Http;
 using DataServer_Stuff;
 using System.Threading.Tasks;
+using DataServer.Services;
+using System.Text.RegularExpressions;
+using System.Diagnostics;
+using System;
+using System.Text;
 
 namespace DataServer.IntegrationTests.Services.Paciente
 {
@@ -22,6 +27,9 @@ namespace DataServer.IntegrationTests.Services.Paciente
 
 			// THEN
 			response.EnsureSuccessStatusCode();
+			string xmlContent = Methods.GetInnerTextFromResponseBySoapAction(response, SOAPAction.ReadRecordAuth);
+			Assert.Contains("<SZPACIENTE>", xmlContent);
+			Assert.Contains("</SZPACIENTE>", xmlContent);
 		}
 
 		[Fact]
@@ -37,6 +45,9 @@ namespace DataServer.IntegrationTests.Services.Paciente
 
 			// THEN
 			response.EnsureSuccessStatusCode();
+			string xmlContent = Methods.GetInnerTextFromResponseBySoapAction(response, SOAPAction.SaveRecordAuth);
+			Assert.Matches(new Regex("^[0-9]+$"), xmlContent.Split(';')[0]);
+			Assert.Matches(new Regex("^[0-9]+$"), xmlContent.Split(';')[1]);
 		}
 
 		[Fact]
@@ -52,6 +63,9 @@ namespace DataServer.IntegrationTests.Services.Paciente
 
 			// THEN
 			response.EnsureSuccessStatusCode();
+			string xmlContent = Methods.GetInnerTextFromResponseBySoapAction(response, SOAPAction.SaveRecordAuth);
+			Assert.Matches(new Regex("^[0-9]+$"), xmlContent.Split(';')[0]);
+			Assert.Matches(new Regex("^[0-9]+$"), xmlContent.Split(';')[1]);
 		}
 
 		[Fact]
@@ -96,6 +110,53 @@ namespace DataServer.IntegrationTests.Services.Paciente
 
 			// THEN
 			Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+		}
+
+		[Fact]
+		public async Task Read_Paciente_returns_INVALID_REQUEST()
+		{
+			// GIVEN
+			var readRecordEnvelopeBody = ReadRecordSZPacienteEnvelopeBody(ScenarioBase.Coligada, "997852");
+			string envelope = EnvelopeXmlBuilder(readRecordEnvelopeBody, SOAPAction.ReadRecordAuth);
+			var content = new StringContent(envelope, Encoding.UTF8, "text/xml");
+			var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, ApiUrl);
+			httpRequestMessage.Headers.Add("SOAPAction", $@"http://www.totvs.com.br/br/{SOAPAction.ReadRecordAuth}");
+			httpRequestMessage.Content = content;
+
+			// WHEN
+			//var response = await new HttpClient().SendAsync(httpRequestMessage);
+			var response = await new HttpClient().PostAsync(ApiUrl, content);
+
+			// THEN
+			Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+		}
+
+		[Theory]
+		[InlineData(3000)]
+		public async Task Read_Paciente_Time_Response_Under(int timeout)
+		{
+			// GIVEN
+			var readRecordEnvelopeBody = ReadRecordSZPacienteEnvelopeBody(ScenarioBase.Coligada, "997852");
+			var httpRequestMessage = SZPacienteBuilder(readRecordEnvelopeBody, SOAPAction.ReadRecordAuth);
+			HttpResponseMessage response = new HttpResponseMessage();
+			HttpClient httpClient = new HttpClient
+			{
+				Timeout = TimeSpan.FromMilliseconds(timeout)
+			};
+			var stopwatch = new Stopwatch();
+
+			// WHEN
+			try
+			{
+				stopwatch.Start();
+				response = await httpClient.SendAsync(httpRequestMessage);
+				stopwatch.Stop();
+			}
+			// THEN
+			catch (TaskCanceledException)
+			{
+				throw new Exception($"Tempo de resposta da Request foi de {stopwatch.ElapsedMilliseconds} milisegundos, excedendo o Timeout de {timeout} milisegundos");
+			}
 		}
 	}
 }
