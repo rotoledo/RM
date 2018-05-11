@@ -2,7 +2,7 @@
 using System.Net.Http;
 using DataServer_Stuff;
 
-namespace DataServer.FunctionalTests.Services.Paciente
+namespace FunctionalTests.DataServer.Services.Paciente
 {
 	public class PacienteScenarioBase : ScenarioBase
 	{

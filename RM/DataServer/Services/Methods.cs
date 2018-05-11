@@ -5,7 +5,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using DataServer_Stuff;
 
-namespace DataServer.Services
+namespace IntegrationTests.DataServer.Services
 {
 	public class Methods
 	{

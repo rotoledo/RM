@@ -80,9 +80,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Services\Methods.cs" />
-    <Compile Include="Services\Paciente\PacienteScenarioBase.cs" />
-    <Compile Include="Services\Paciente\PacienteScenarios.cs" />
+    <Compile Include="DataServer\Services\Methods.cs" />
+    <Compile Include="DataServer\Services\Paciente\PacienteScenarioBase.cs" />
+    <Compile Include="DataServer\Services\Paciente\PacienteScenarios.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +102,9 @@
       <Project>{5f3da0a7-8347-41bc-8d9f-8eaa5b95f85e}</Project>
       <Name>RM_Stuff</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Process\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

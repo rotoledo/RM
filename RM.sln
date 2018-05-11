@@ -5,15 +5,13 @@ VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "RM\IntegrationTests.csproj", "{B2BD9E37-F215-4235-9C9E-B9E404366E04}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataServer", "DataServer", "{CDDDEB7B-F59A-4FF0-9EAD-FA95C587BD97}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RM_Service_Base", "RM_Service_Base", "{CDDDEB7B-F59A-4FF0-9EAD-FA95C587BD97}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionalTests", "FunctionalTests\FunctionalTests.csproj", "{53804B5D-6F29-49C3-AD2F-9187EA72CF32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RM_Stuff", "RMStuff\RM_Stuff.csproj", "{5F3DA0A7-8347-41BC-8D9F-8EAA5B95F85E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RM_Stuff", "RMStuff\RM_Stuff.csproj", "{5F3DA0A7-8347-41BC-8D9F-8EAA5B95F85E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataServer_Stuff", "DataServer_Stuff\DataServer_Stuff.csproj", "{E9D72B9F-54A8-4A37-A739-3CACBC22B931}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Process", "Process", "{4B80DB5A-8D22-45EA-BA6A-F4AAFD4DED3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataServer_Stuff", "DataServer_Stuff\DataServer_Stuff.csproj", "{E9D72B9F-54A8-4A37-A739-3CACBC22B931}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,8 +40,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{B2BD9E37-F215-4235-9C9E-B9E404366E04} = {CDDDEB7B-F59A-4FF0-9EAD-FA95C587BD97}
-		{53804B5D-6F29-49C3-AD2F-9187EA72CF32} = {CDDDEB7B-F59A-4FF0-9EAD-FA95C587BD97}
+		{5F3DA0A7-8347-41BC-8D9F-8EAA5B95F85E} = {CDDDEB7B-F59A-4FF0-9EAD-FA95C587BD97}
 		{E9D72B9F-54A8-4A37-A739-3CACBC22B931} = {CDDDEB7B-F59A-4FF0-9EAD-FA95C587BD97}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

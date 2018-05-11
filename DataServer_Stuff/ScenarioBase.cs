@@ -8,7 +8,7 @@ namespace DataServer_Stuff
 		public static string Usuario = "mestre";
 		public static string Senha = "totvs";
 		public static string Coligada = "2";
-		public static string ApiUrlBase = "poad040100781";
+		public static string ApiUrlBase = "poavudev01"; // "10.51.5.89";  //  // "10.51.5.140"; // "poad040100781";
 		public static string ApiUrl = $"http://{ApiUrlBase}/TOTVSBusinessConnect/wsDataServer.asmx";
 		public static string contexto = $"CODCOLIGADA={Coligada};CODSISTEMA=O;CODUSUARIO={Usuario}";
 

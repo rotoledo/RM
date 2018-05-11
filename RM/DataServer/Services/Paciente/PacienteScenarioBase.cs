@@ -1,9 +1,8 @@
 ﻿using RM_Stuff;
 using System.Net.Http;
-using DataServer.Services;
 using DataServer_Stuff;
 
-namespace DataServer.IntegrationTests.Services.Paciente
+namespace IntegrationTests.DataServer.Services.Paciente
 {
 	public class PacienteScenarioBase : ScenarioBase
 	{

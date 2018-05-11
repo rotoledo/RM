@@ -4,7 +4,7 @@ using System.Net.Http;
 using DataServer_Stuff;
 using System.Threading.Tasks;
 
-namespace DataServer.FunctionalTests.Services.Paciente
+namespace FunctionalTests.DataServer.Services.Paciente
 {
 	public class PacienteScenarios : PacienteScenarioBase
 	{
@@ -21,11 +21,26 @@ namespace DataServer.FunctionalTests.Services.Paciente
 			var response = await new HttpClient().SendAsync(httpRequestMessage);
 
 			// THEN
-			string xmlContent = Methods.GetInnerTextFromSaveRecordResponse(response);
+			string xmlContent = Methods.GetInnerTextFromResponseBySoapAction(response, SOAPAction.SaveRecordAuth);
 			Assert.Equal(Coligada, xmlContent.Split(';')[0]);
 			Assert.NotEmpty(xmlContent.Split(';')[1]);
 		}
 
+		[Fact]
+		public async Task Can_Read_Paciente()
+		{
+			// GIVEN
+			var readRecordEnvelopeBody = ReadRecordSZPacienteEnvelopeBody(ScenarioBase.Coligada, "997852");
+			var httpRequestMessage = SZPacienteBuilder(readRecordEnvelopeBody, SOAPAction.ReadRecordAuth);
+
+			// WHEN
+			var response = await new HttpClient().SendAsync(httpRequestMessage);
+
+			// THEN
+			var dbPaciente = ExtractPacienteFromReadRecordResponse(response);
+			Assert.Equal("997852", dbPaciente.CODPACIENTE);
+			Assert.Equal("TESTE DE AUTOMAÇÃO COM API - NÃO ALTERAR DADOS DESSE PACIENTE", dbPaciente.OBSERVACAO);
+		}
 
 		[Fact]
 		public async Task Can_Update_And_Read_Paciente()
