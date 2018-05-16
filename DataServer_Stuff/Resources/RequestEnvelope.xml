@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:br="http://www.totvs.com.br/br/">
+	<soap:Header/>
+	<soap:Body>
+		<br:soapAction>
+			<br:DataServerName>envelopeBody.DataServerName</br:DataServerName>
+			<br:attributeName>envelopeBody.Content</br:attributeName>
+			<br:Contexto>envelopeBody.Contexto</br:Contexto>
+			<br:Usuario>envelopeBody.Usuario</br:Usuario>
+			<br:Senha>envelopeBody.Senha</br:Senha>
+		</br:soapAction>
+	</soap:Body>
+</soap:Envelope>

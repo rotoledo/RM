@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.IO;
+using System.Net.Http;
 using System.Text;
 
 namespace DataServer_Stuff
@@ -8,7 +9,7 @@ namespace DataServer_Stuff
 		public static string Usuario = "mestre";
 		public static string Senha = "totvs";
 		public static string Coligada = "2";
-		public static string ApiUrlBase = "poavudev01"; // "10.51.5.89";  //  // "10.51.5.140"; // "poad040100781";
+		public static string ApiUrlBase = "10.51.2.133"; // "poavudev01"; // "10.51.5.89"; Diego  //  // "10.51.5.140"; // "poad040100781";
 		public static string ApiUrl = $"http://{ApiUrlBase}/TOTVSBusinessConnect/wsDataServer.asmx";
 		public static string contexto = $"CODCOLIGADA={Coligada};CODSISTEMA=O;CODUSUARIO={Usuario}";
 
@@ -38,18 +39,16 @@ namespace DataServer_Stuff
 				attributeName = "PrimaryKey";
 			else attributeName = "XML";
 
-			return $@"<soap:Envelope xmlns:soap=""http://www.w3.org/2003/05/soap-envelope"" xmlns:br=""http://www.totvs.com.br/br/"">
-							<soap:Header/>
-								<soap:Body>
-								<br:{soapAction}>
-									<br:DataServerName>{envelopeBody.DataServerName}</br:DataServerName>
-									<br:{attributeName}>{envelopeBody.Content}</br:{attributeName}>
-									<br:Contexto>{envelopeBody.Contexto}</br:Contexto>
-									<br:Usuario>{envelopeBody.Usuario}</br:Usuario>
-									<br:Senha>{envelopeBody.Senha}</br:Senha>
-								</br:{soapAction}>
-							</soap:Body>
-						</soap:Envelope>";
+			var envelope = File.ReadAllText(@".\Resources\RequestEnvelope.xml");
+			envelope = envelope.Replace("soapAction", soapAction)
+				.Replace("attributeName", attributeName)
+				.Replace("envelopeBody.DataServerName", envelopeBody.DataServerName)
+				.Replace("envelopeBody.Content", envelopeBody.Content)
+				.Replace("envelopeBody.Contexto", envelopeBody.Contexto)
+				.Replace("envelopeBody.Usuario", envelopeBody.Usuario)
+				.Replace("envelopeBody.Senha", envelopeBody.Senha);
+
+			return envelope;
 		}
 
 		public HttpRequestMessage RequestMessageBuider(EnvelopeBody envelopeBody, string soapAction)

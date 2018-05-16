@@ -46,7 +46,7 @@ namespace FunctionalTests.DataServer.Services.Paciente
 		public async Task Can_Update_And_Read_Paciente()
 		{
 			// GIVEN
-			var paciente = new SZPACIENTE() { CODPACIENTE = "997852" };
+			var paciente = new SZPACIENTE() { CODPACIENTE = CodPaciente };
 			var szPacienteXml = SZPacienteXmlBuilder(paciente);
 			var saveRecordEnvelopeBody = SaveRecordSZPacienteEnvelopeBody(szPacienteXml);
 			var httpRequestMessage_SaveRecord = SZPacienteBuilder(saveRecordEnvelopeBody, SOAPAction.SaveRecordAuth);
@@ -55,7 +55,7 @@ namespace FunctionalTests.DataServer.Services.Paciente
 			var responseUpdate = await new HttpClient().SendAsync(httpRequestMessage_SaveRecord);
 
 			// AND
-			var readRecordEnvelopeBody = ReadRecordSZPacienteEnvelopeBody(ScenarioBase.Coligada, "997852");
+			var readRecordEnvelopeBody = ReadRecordSZPacienteEnvelopeBody(ScenarioBase.Coligada, CodPaciente);
 			var httpRequestMessage_ReadRecord = SZPacienteBuilder(readRecordEnvelopeBody, SOAPAction.ReadRecordAuth);
 
 			// WHEN

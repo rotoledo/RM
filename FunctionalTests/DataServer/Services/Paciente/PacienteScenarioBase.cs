@@ -6,6 +6,7 @@ namespace FunctionalTests.DataServer.Services.Paciente
 {
 	public class PacienteScenarioBase : ScenarioBase
 	{
+		public static string CodPaciente = "98962";
 
 		public string SZPacienteXmlBuilder(SZPACIENTE sZPACIENTE)
 		{
