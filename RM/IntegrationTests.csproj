@@ -85,7 +85,9 @@
     <Compile Include="DataServer\Services\Methods.cs" />
     <Compile Include="DataServer\Services\Paciente\PacienteScenarioBase.cs" />
     <Compile Include="DataServer\Services\Paciente\PacienteScenarios.cs" />
+    <Compile Include="DataServer\Services\Prestador\PrestadorScenarios.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Web Service\APIScenarios.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

@@ -12,7 +12,7 @@ namespace IntegrationTests.DataServer.Services.Paciente
 
 		public string SZPacienteXmlBuilder(SZPACIENTE sZPACIENTE)
 		{
-			var file = $@"<![CDATA[{File.ReadAllText(@".\DataServer\Services\Paciente\SZPaciente.xml")}]]>";
+			var file = $@"<![CDATA[{File.ReadAllText(@".\Resources\SZPaciente.xml")}]]>";
 			file = file.Replace("sZPACIENTE.CODPACIENTE", sZPACIENTE.CODPACIENTE)
 				.Replace("sZPACIENTE.NOMEPACIENTE", sZPACIENTE.NOMEPACIENTE)
 				.Replace("sZPACIENTE.CPF", sZPACIENTE.CPF);

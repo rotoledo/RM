@@ -29,14 +29,14 @@ namespace FunctionalTests.DataServer.Services.Paciente
 		[Fact]
 		public async Task Can_Read_Paciente()
 		{
-			// GIVEN
+			// GIVEN // Arrange
 			var readRecordEnvelopeBody = ReadRecordSZPacienteEnvelopeBody(ScenarioBase.Coligada, "997852");
 			var httpRequestMessage = SZPacienteBuilder(readRecordEnvelopeBody, SOAPAction.ReadRecordAuth);
 
-			// WHEN
+			// WHEN // Act
 			var response = await new HttpClient().SendAsync(httpRequestMessage);
 
-			// THEN
+			// THEN // Assert
 			var dbPaciente = ExtractPacienteFromReadRecordResponse(response);
 			Assert.Equal("997852", dbPaciente.CODPACIENTE);
 			Assert.Equal("TESTE DE AUTOMAÇÃO COM API - NÃO ALTERAR DADOS DESSE PACIENTE", dbPaciente.OBSERVACAO);

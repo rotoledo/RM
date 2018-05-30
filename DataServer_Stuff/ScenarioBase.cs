@@ -9,7 +9,7 @@ namespace DataServer_Stuff
 		public static string Usuario = "mestre";
 		public static string Senha = "totvs";
 		public static string Coligada = "2";
-		public static string ApiUrlBase = "10.51.2.133"; // "poavudev01"; // "10.51.5.89"; Diego  //  // "10.51.5.140"; // "poad040100781";
+		public static string ApiUrlBase = "10.51.2.133"; // "poavudev01";  // "10.51.5.89"; Diego  //  // "10.51.5.140"; // "poad040100781";
 		public static string ApiUrl = $"http://{ApiUrlBase}/TOTVSBusinessConnect/wsDataServer.asmx";
 		public static string contexto = $"CODCOLIGADA={Coligada};CODSISTEMA=O;CODUSUARIO={Usuario}";
 
@@ -37,6 +37,8 @@ namespace DataServer_Stuff
 
 			if (soapAction.Contains("ReadRecord"))
 				attributeName = "PrimaryKey";
+			else if (soapAction.Contains("ReadView"))
+				attributeName = "Filtro";
 			else attributeName = "XML";
 
 			var envelope = File.ReadAllText(@".\Resources\RequestEnvelope.xml");
@@ -51,7 +53,7 @@ namespace DataServer_Stuff
 			return envelope;
 		}
 
-		public HttpRequestMessage RequestMessageBuider(EnvelopeBody envelopeBody, string soapAction)
+		public static HttpRequestMessage RequestMessageBuider(EnvelopeBody envelopeBody, string soapAction)
 		{
 			string envelope = EnvelopeXmlBuilder(envelopeBody, soapAction);
 			var content = new StringContent(envelope, Encoding.UTF8, "text/xml");
